@@ -1,6 +1,7 @@
 //  Simple graph engine
 //  creates and manages nodes and links according inLinks and outLinks
 
+
 GraphEngine = function GraphEngine() {
   var nodes    = [];
   var links    = [];
@@ -38,7 +39,6 @@ GraphEngine = function GraphEngine() {
       node.placeholder = false;
       updateNode(inLink, outLinks);
     }
-    triggerUpdate();
   }
 
   function addLink(inLink, outLink) {
@@ -118,24 +118,25 @@ GraphEngine = function GraphEngine() {
     delete inLinkToNode[inLink];
     var index = nodes.indexOf(node);
     if (index > -1) {
-      nodes.splice(i, 1);
-    }
-    //  remove all links where this one is source
-    node.outLinks = [];
-    var linksToRemove = [];
-    for (var i=0; i<links.length; i++) {
-      if (links[i].source == node) {
-        var linkEncoding = node.inLink + '\n' + links[i].target.inLink;
-        delete linkEncodingToLink[linkEncoding];
-        links.splice(i,1);
-        i -= 1;
+      nodes.splice(index, 1);
+      //  remove all links where this one is source
+      node.outLinks = [];
+      for (var i=0; i<links.length; i++) {
+        if (links[i].source == node) {
+          var linkEncoding = node.inLink + '\n' + links[i].target.inLink;
+          delete linkEncodingToLink[linkEncoding];
+          links.splice(i,1);
+          i -= 1;
+        }
       }
+      //  set to placeholder
+      //  it will be cleaned up if nothing references it
+      node.placeholder = true;
+      removeOrphanPlaceholders();
     }
-    //  set to placeholder
-    //  it will be cleaned up if nothing references it
-    node.placeholder = true;
-    removeOrphanPlaceholders();
-    triggerUpdate();
+    else {
+      throw new Error('Cannot remove node that does not exist.');
+    }
   }
 
   function removeOrphanPlaceholders() {
@@ -157,15 +158,15 @@ GraphEngine = function GraphEngine() {
     }
   }
 
-  function triggerUpdate(callback) {
-    onUpdate.forEach(function (fn) {fn();});
-  }
-
   //  apply update functions
-  this.onUpdate = function (fn) {onUpdate.push(fn);};
   this.nodes = function () {return nodes};
   this.links = function () {return links};
   this.addNode    = addNode;
   this.updateNode = updateNode;
   this.removeNode = removeNode;
+}
+
+
+if (module) {
+  module.exports = GraphEngine
 }

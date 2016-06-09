@@ -52,6 +52,11 @@ test(g.links().length, 3, 'expected link removed on update');
 g.updateNode('b', []);
 test(g.nodes().length, 3, 'expected node removed on update');
 
+console.log(g.nodes());
+g.removeNode('b');
+console.log(g.nodes());
+test(g.nodes().length, 2, 'only expected node removed')
+
 errorThrown = false;
 try {g.updateNode('c', ['a'])}
 catch (error) {errorThrown = true;}
