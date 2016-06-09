@@ -1,7 +1,7 @@
 //  Simple graph engine
 //  creates and manages nodes and links according inLinks and outLinks
 
-module.exports = function GraphEngine() {
+GraphEngine = function GraphEngine() {
   var nodes    = [];
   var links    = [];
   var onUpdate = [];
