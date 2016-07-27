@@ -7,7 +7,7 @@ A simple object that maintains a list of nodes and links in response to updates
 var g = new GraphEngine();
 
 g.addNode('anIdForTheNode', ['listOf', 'otherNodeIds', 'thatNodeLinksTo']);
-g.updateNode('anIdForTheNode', ['new', 'listOf', 'otherNodeIds']);
+g.updateNode('anIdForTheNode', ['new', 'listOf', 'otherNodeIds', 'thatNodeNowLinksTo']);
 g.removeNode('anIdForTheNode');
 
 g.onUpdate(functionToExecuteWheneverGraphChanges);
